@@ -1,16 +1,20 @@
 package main
 import (
-    "fmt"
+    "flag"
+    "log"
+    "github.com/hanwen/go-fuse/fuse/pathfs"
+    "github.com/hanwen/go-fuse/fuse/nodefs"
 )
 
 func main() {
-    performers, err := LoadPerformers()
+    flag.Parse()
+    if len(flag.Args()) < 1 {
+        log.Fatal("Usage:\n libcoding4 MOUNTPOINT")
+    }
+    nfs := pathfs.NewPathNodeFs(&LibcodingFs{FileSystem: pathfs.NewDefaultFileSystem()}, nil)
+    server, _, err := nodefs.MountRoot(flag.Arg(0), nfs.Root(), nil)
     if err != nil {
-        fmt.Println(err)
-        return
+        log.Fatalf("Mount fail: %v\n", err)
     }
-
-    for _, ps := range performers {
-        fmt.Println(ps.Name)
-    }
+    server.Serve()
 }
