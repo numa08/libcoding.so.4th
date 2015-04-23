@@ -1,4 +1,4 @@
-package main
+package libcoding
 import (
     "net/http"
     "io/ioutil"

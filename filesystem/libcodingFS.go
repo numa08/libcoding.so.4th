@@ -1,23 +1,24 @@
-package main
+package filesystem
 import (
     "github.com/hanwen/go-fuse/fuse/pathfs"
     "github.com/hanwen/go-fuse/fuse"
     "github.com/hanwen/go-fuse/fuse/nodefs"
+    "github.com/numa08/libcoding.so.4th/libcoding"
 )
 
 type LibcodingFs struct {
     pathfs.FileSystem
-    _performers []Performer
+    _performers []libcoding.Performer
 }
 
-func (this *LibcodingFs) performers() []Performer {
+func (this *LibcodingFs) performers() []libcoding.Performer {
     if this == nil {
         return nil
     }
     if this._performers != nil {
         return this._performers
     }
-    this._performers, _ = LoadPerformers()
+    this._performers, _ = libcoding.LoadPerformers()
     return this._performers
 }
 
@@ -63,7 +64,7 @@ func (this *LibcodingFs) Open(name string, flags uint32, context *fuse.Context) 
     return nodefs.NewDataFile([]byte(performer.Name)), fuse.OK
 }
 
-func search(pf []Performer, n string) *Performer {
+func search(pf []libcoding.Performer, n string) *libcoding.Performer {
     for _, p := range pf {
         if p.Name == n {
             return &p

@@ -69,3 +69,5 @@ _testmain.go
 
 # Windows
 Thumbs.db
+
+build/*
